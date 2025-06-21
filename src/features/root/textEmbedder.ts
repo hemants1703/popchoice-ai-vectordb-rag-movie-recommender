@@ -40,7 +40,7 @@ export default async function embedText(text: string) {
     }
 }
 
-async function splitTextIntoChunks(text: string, chunkSize: number): Promise<string[]> {
+export async function splitTextIntoChunks(text: string, chunkSize: number): Promise<string[]> {
     if (!text || text.trim() === "") {
         throw new Error("Text cannot be empty or whitespace.");
     }
