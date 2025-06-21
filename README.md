@@ -63,7 +63,7 @@ User Input → Text Embedding → Vector Search → Movie Recommendations
 ### 1. Clone & Install
 
 ```bash
-git clone <repository-url>
+git clone [<repository-url>](https://github.com/hemants1703/popchoice-ai-vectordb-rag-movie-recommender.git)
 cd popchoice-ai-vectordb-rag-movie-recommender
 pnpm install
 ```
@@ -79,9 +79,6 @@ OPENAI_API_KEY=your_openai_api_key_here
 # Supabase Configuration
 NEXT_SUPABASE_URL=your_supabase_project_url
 NEXT_SUPABASE_API_KEY=your_supabase_anon_key
-
-# Google Gemini (Optional - for data embedding)
-GEMINI_API_KEY=your_gemini_api_key
 ```
 
 ### 3. Database Setup
