@@ -28,15 +28,15 @@ export async function performRagAndRecommendMovie(initialState: PopChoiceFormPro
             throw new Error("No embeddings returned. Please check the input text and try again.");
         }
 
-        if (!process.env.NEXT_SUPABASE_URL || !process.env.NEXT_SUPABASE_API_KEY) {
+        if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
             throw new Error("Supabase URL or Anon Key is not set. Please check your environment variables.");
         }
 
-        const supabase = createClient(process.env.NEXT_SUPABASE_URL!, process.env.NEXT_SUPABASE_API_KEY!);
+        const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
         
         let { data, error } = await supabase
-            .rpc('match_scrimba_challenges', {
+            .rpc('match_popchoice', {
                 match_count: 3, 
                 match_threshold: 0.5, 
                 query_embedding: embeddedQuery
@@ -52,12 +52,13 @@ export async function performRagAndRecommendMovie(initialState: PopChoiceFormPro
             };
         }
 
+        console.log("Raw movie recommendation data:", data);
+        
+
         if (!data || data.length === 0) {
             return {
                 errors: {
-                    question1: "No movie recommendations found. Please try different questions.",
-                    question2: "No movie recommendations found. Please try different questions.",
-                    question3: "No movie recommendations found. Please try different questions."
+                    message: "No movie recommendations found. Please try different questions."
                 }
             };
         }
@@ -66,17 +67,12 @@ export async function performRagAndRecommendMovie(initialState: PopChoiceFormPro
         
 
         const recommendedMovie = data[0];
-        return {
-            recommendedMovie,
-            errors: {}
-        };
+        return { recommendedMovie };
     } catch (error) {
         console.error("Error performing RAG and recommending movie:", error);
         return {
             errors: {
-                question1: "An error occurred while processing your request. Please try again later.",
-                question2: "An error occurred while processing your request. Please try again later.",
-                question3: "An error occurred while processing your request. Please try again later."
+                message: error instanceof Error ? error.message : "An unexpected error occurred."
             }
         };
     }

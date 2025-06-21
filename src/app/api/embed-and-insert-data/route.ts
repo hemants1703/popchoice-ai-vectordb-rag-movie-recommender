@@ -4,14 +4,14 @@ import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
 export async function POST(request: NextRequest) {
-    const text = await request.text();
+    const text: string = await request.text();
 
     if (!text || text.trim() === "") {
         return NextResponse.json({ error: "No data provided" }, { status: 400 });
     }
 
     try {
-        const textChunks = await splitTextIntoChunks(text, 1000);
+        const textChunks: string[] = await splitTextIntoChunks(text, 1000);
         
         if (textChunks.length === 0) {
             return NextResponse.json({ error: "No text chunks created. Please provide a longer text." }, { status: 400 });
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
             }
 
             const { data, error } = await supabase
-                .from("popchoice_vector_db")
+                .from("match_popchoice")
                 .insert([{
                     content: chunk,
                     embedding: response.data[0].embedding
